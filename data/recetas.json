@@ -1,0 +1,82 @@
+[
+    {
+        "id": 1,
+        "nombre": "Arroz con pollo",
+        "ingredientes": ["pollo", "arroz", "cebolla", "ajo", "zanahoria", "sal", "pimienta"],
+        "instrucciones": "1. Sofreír la cebolla y ajo. 2. Agregar el pollo. 3. Añadir arroz y agua. 4. Cocinar por 20 minutos.",
+        "tiempo": 45,
+        "dificultad": "media",
+        "categoria": ["principal", "pollo"],
+        "tags": ["sin lacteos"]
+    },
+    {
+        "id": 2,
+        "nombre": "Ensalada de tomate",
+        "ingredientes": ["tomate", "cebolla", "aceite de oliva", "vinagre", "sal", "albahaca"],
+        "instrucciones": "1. Cortar tomate y cebolla. 2. Aliñar con aceite, vinagre y sal. 3. Decorar con albahaca.",
+        "tiempo": 10,
+        "dificultad": "facil",
+        "categoria": ["ensalada", "vegetariano"],
+        "tags": ["vegetariano", "vegano", "sin gluten"]
+    },
+    {
+        "id": 3,
+        "nombre": "Pollo al horno",
+        "ingredientes": ["pollo", "papas", "cebolla", "ajo", "romero", "limón", "aceite de oliva"],
+        "instrucciones": "1. Marinar el pollo con limón y romero. 2. Hornear con papas por 1 hora.",
+        "tiempo": 60,
+        "dificultad": "facil",
+        "categoria": ["principal", "pollo"],
+        "tags": ["sin lacteos"]
+    },
+    {
+        "id": 4,
+        "nombre": "Tortilla de papas",
+        "ingredientes": ["huevos", "papas", "cebolla", "aceite de oliva", "sal"],
+        "instrucciones": "1. Freír papas y cebolla. 2. Batir huevos y mezclar. 3. Cocinar por ambos lados.",
+        "tiempo": 30,
+        "dificultad": "media",
+        "categoria": ["principal", "tapas"],
+        "tags": ["vegetariano", "sin gluten"]
+    },
+    {
+        "id": 5,
+        "nombre": "Sopa de tomate",
+        "ingredientes": ["tomate", "cebolla", "ajo", "caldo de verduras", "albahaca", "aceite de oliva"],
+        "instrucciones": "1. Sofreír cebolla y ajo. 2. Agregar tomate y caldo. 3. Cocinar 20 minutos y licuar.",
+        "tiempo": 35,
+        "dificultad": "facil",
+        "categoria": ["sopa", "vegetariano"],
+        "tags": ["vegetariano", "vegano"]
+    },
+    {
+        "id": 6,
+        "nombre": "Pasta con salsa de tomate",
+        "ingredientes": ["pasta", "tomate", "cebolla", "ajo", "albahaca", "queso parmesano"],
+        "instrucciones": "1. Cocer pasta. 2. Preparar salsa con tomate. 3. Mezclar y servir con queso.",
+        "tiempo": 25,
+        "dificultad": "facil",
+        "categoria": ["principal", "pasta"],
+        "tags": ["vegetariano"]
+    },
+    {
+        "id": 7,
+        "nombre": "Pollo a la plancha",
+        "ingredientes": ["pechuga de pollo", "limón", "ajo", "sal", "pimienta", "aceite de oliva"],
+        "instrucciones": "1. Marinar pollo con limón y ajo. 2. Cocinar a la plancha 5 min por lado.",
+        "tiempo": 15,
+        "dificultad": "facil",
+        "categoria": ["principal", "pollo"],
+        "tags": ["sin lacteos", "sin gluten"]
+    },
+    {
+        "id": 8,
+        "nombre": "Guacamole",
+        "ingredientes": ["aguacate", "jitomate", "cebolla", "limón", "cilantro", "sal"],
+        "instrucciones": "1. Machacar aguacate. 2. Picar jitomate y cebolla. 3. Mezclar todo con limón y cilantro.",
+        "tiempo": 15,
+        "dificultad": "facil",
+        "categoria": ["entrada", "dip"],
+        "tags": ["vegetariano", "vegano", "sin gluten"]
+    }
+]
