@@ -84,4 +84,26 @@ class ChefAI_Recomendador:
         
         return True
     
-    def _calcular_faltantes(self, ingredientes_usuario: Union
+    def _calcular_faltantes(self, ingredientes_usuario: Union[str, List[str]], 
+                           ingredientes_receta: List[str]) -> List[str]:
+        if isinstance(ingredientes_usuario, str):
+            ingredientes_usuario = [i.strip() for i in ingredientes_usuario.split(',')]
+        
+        norm_usuario = self.processor.normalizar_lista(ingredientes_usuario)
+        norm_receta = self.processor.normalizar_lista(ingredientes_receta)
+        
+        faltantes = norm_receta - norm_usuario
+        return list(faltantes)[:5]
+
+
+if __name__ == "__main__":
+    recomendador = ChefAI_Recomendador()
+    
+    ingredientes = ["pollo", "arroz", "cebolla"]
+    resultados = recomendador.recomendar(ingredientes, top_n=3)
+    
+    print("\n=== RECOMENDACIONES ===")
+    for i, rec in enumerate(resultados, 1):
+        print(f"\n{i}. {rec['nombre']}")
+        print(f"   Coincidencia: {rec['coincidencia']}")
+        print(f"   Faltantes: {rec['ingredientes_faltantes'][:3]}")
