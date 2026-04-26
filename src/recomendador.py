@@ -1,9 +1,10 @@
-# src/recomendador.py
+# backend/src/recomendador.py
 import joblib
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from typing import List, Dict, Optional, Union
 import logging
+import os
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -12,13 +13,20 @@ class ChefAI_Recomendador:
     """Recomendador de recetas usando modelo entrenado"""
     
     def __init__(self, ruta_modelo: str = 'modelo/chefai_brain.pkl'):
+        # Ruta absoluta por si se llama desde otro lugar
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        ruta_modelo = os.path.join(base_dir, ruta_modelo)
+        
         logger.info(f"Cargando modelo desde {ruta_modelo}")
         self.modelo = joblib.load(ruta_modelo)
         
         self.vectorizer = self.modelo['vectorizer']
         self.matrix = self.modelo['matrix']
         self.df = self.modelo['recipes_df']
-        self.processor = self.modelo['processor']
+        
+        # Importar aquí para evitar circular imports
+        from src.preprocessor import IngredientProcessor
+        self.processor = IngredientProcessor()
         
         logger.info(f"Modelo cargado: {len(self.df)} recetas listas")
     
@@ -52,7 +60,6 @@ class ChefAI_Recomendador:
                     )
                 }
                 resultados.append(resultado)
-                
                 if len(resultados) >= top_n:
                     break
         
@@ -61,11 +68,9 @@ class ChefAI_Recomendador:
     def _cumple_filtros(self, receta: Dict, filtros: Optional[Dict]) -> bool:
         if not filtros:
             return True
-        
         if 'dificultad' in filtros:
             if receta.get('dificultad', '').lower() != filtros['dificultad'].lower():
                 return False
-        
         if 'tiempo_max' in filtros:
             tiempo = receta.get('tiempo', 999)
             if isinstance(tiempo, str):
@@ -75,35 +80,18 @@ class ChefAI_Recomendador:
                     tiempo = 999
             if tiempo > filtros['tiempo_max']:
                 return False
-        
         if 'tags' in filtros:
             tags_receta = set(receta.get('tags', []))
             tags_requeridos = set(filtros['tags'])
             if not tags_requeridos.issubset(tags_receta):
                 return False
-        
         return True
     
     def _calcular_faltantes(self, ingredientes_usuario: Union[str, List[str]], 
                            ingredientes_receta: List[str]) -> List[str]:
         if isinstance(ingredientes_usuario, str):
             ingredientes_usuario = [i.strip() for i in ingredientes_usuario.split(',')]
-        
         norm_usuario = self.processor.normalizar_lista(ingredientes_usuario)
         norm_receta = self.processor.normalizar_lista(ingredientes_receta)
-        
         faltantes = norm_receta - norm_usuario
         return list(faltantes)[:5]
-
-
-if __name__ == "__main__":
-    recomendador = ChefAI_Recomendador()
-    
-    ingredientes = ["pollo", "arroz", "cebolla"]
-    resultados = recomendador.recomendar(ingredientes, top_n=3)
-    
-    print("\n=== RECOMENDACIONES ===")
-    for i, rec in enumerate(resultados, 1):
-        print(f"\n{i}. {rec['nombre']}")
-        print(f"   Coincidencia: {rec['coincidencia']}")
-        print(f"   Faltantes: {rec['ingredientes_faltantes'][:3]}")
