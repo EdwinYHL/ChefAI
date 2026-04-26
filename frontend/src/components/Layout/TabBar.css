@@ -1,0 +1,7 @@
+/* Estilos adicionales si quieres personalizar la tab bar */
+.tab-bar {
+  transition: all 0.2s ease;
+}
+.tab-bar a.active {
+  color: #FF5C00;
+}
