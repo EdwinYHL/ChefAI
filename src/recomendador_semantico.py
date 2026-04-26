@@ -1,11 +1,10 @@
-# backend/src/recomendador_semantico.py
+# src/recomendador_semantico.py
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from .recomendador import ChefAI_Recomendador  # Importación relativa
-from .red_semantica import RedSemanticaIngredientes
+from recomendador import ChefAI_Recomendador
+from red_semantica import RedSemanticaIngredientes
 from typing import List, Dict, Optional, Union
 import logging
-import os
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -18,8 +17,6 @@ class RecomendadorSemantico(ChefAI_Recomendador):
         super().__init__(ruta_modelo)
         
         self.red_semantica = RedSemanticaIngredientes()
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        ruta_red = os.path.join(base_dir, ruta_red)
         try:
             self.red_semantica.cargar(ruta_red)
             logger.info("Red semántica cargada exitosamente")
@@ -29,6 +26,7 @@ class RecomendadorSemantico(ChefAI_Recomendador):
     
     def expandir_ingredientes_usuario(self, ingredientes: List[str], 
                                       profundidad: int = 1) -> Dict[str, float]:
+        """Expande los ingredientes usando la red semántica"""
         expandido = {}
         for ing in ingredientes:
             expandido[ing] = 1.0
@@ -41,6 +39,7 @@ class RecomendadorSemantico(ChefAI_Recomendador):
         return expandido
     
     def vectorizar_con_semantica(self, ingredientes: List[str]) -> np.ndarray:
+        """Vectoriza considerando expansión semántica"""
         ingredientes_expandidos = self.expandir_ingredientes_usuario(ingredientes)
         texto_expandido = []
         for ing, peso in ingredientes_expandidos.items():
@@ -54,6 +53,7 @@ class RecomendadorSemantico(ChefAI_Recomendador):
                                  top_n: int = 5,
                                  filtros: Optional[Dict] = None,
                                  usar_semantica: bool = True) -> List[Dict]:
+        """Recomienda usando expansión semántica"""
         if isinstance(ingredientes_usuario, str):
             ingredientes_usuario = [i.strip() for i in ingredientes_usuario.split(',')]
         
@@ -94,6 +94,7 @@ class RecomendadorSemantico(ChefAI_Recomendador):
     
     def _calcular_faltantes_con_semantica(self, ingredientes_usuario: List[str],
                                           ingredientes_receta: List[str]) -> List[str]:
+        """Calcula faltantes considerando sustitutos"""
         usuario_expandido = set(self.processor.normalizar_lista(ingredientes_usuario))
         if self.red_semantica:
             for ing in ingredientes_usuario:
@@ -105,6 +106,7 @@ class RecomendadorSemantico(ChefAI_Recomendador):
         return list(faltantes)[:5]
     
     def sugerir_complementos(self, ingredientes: List[str], top_n: int = 5) -> List[Dict]:
+        """Sugiere ingredientes que complementarían bien"""
         if not self.red_semantica:
             return []
         todos_complementos = {}
@@ -124,6 +126,7 @@ class RecomendadorSemantico(ChefAI_Recomendador):
         return sugerencias
     
     def explicar_recomendacion(self, receta: Dict, ingredientes_usuario: List[str]) -> Dict:
+        """Explica por qué se recomendó una receta"""
         explicacion = {
             'receta': receta['nombre'],
             'coincidencia_directa': [],
